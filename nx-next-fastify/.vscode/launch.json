@@ -1,0 +1,101 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "auth-service1",
+      "program": "${workspaceFolder}/node_modules/nx/bin/nx.js",
+      "args": [
+        "serve",
+        "auth-service"
+      ],
+      "cwd": "${workspaceFolder}",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "smartStep": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "auth-service",
+      "program": "${workspaceFolder}/node_modules/nx/bin/nx.js",
+      "args": [
+        "serve",
+        "auth-service"
+      ],
+      "cwd": "${workspaceFolder}",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "smartStep": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "contentwing-web (server)",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "exec",
+        "nx",
+        "run",
+        "contentwing-web:dev"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/dist/apps/web/contentwing-web/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ],
+      "autoAttachChildProcesses": true,
+      "smartStep": true
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "contentwing-web (client)",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/apps/web/contentwing-web",
+      "smartStep": true,
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack://contentwing-web/*": "${webRoot}/src/*",
+        "webpack://contentwing-web/./src/*": "${webRoot}/src/*",
+        "webpack:///./*": "${webRoot}/*",
+        "webpack:///src/*": "${webRoot}/src/*",
+        "webpack:///*": "*"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "contentwing-web (fullstack)",
+      "configurations": [
+        "contentwing-web (server)",
+        "contentwing-web (client)"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "contentwing-web (auth)",
+      "configurations": [
+        "contentwing-web (server)",
+        "contentwing-web (client)",
+        "auth-service"
+      ],
+      "stopAll": true
+    }
+  ]
+}
