@@ -59,6 +59,48 @@
         "webpack:///src/*": "${webRoot}/src/*",
         "webpack:///*": "*"
       }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "my-lib",
+      "program": "${workspaceFolder}/node_modules/nx/bin/nx.js",
+      "args": [
+        "test",
+        "my-lib",
+        "--testPathPattern=example.spec.ts",
+        "--testTimeout=9999999",
+        "--skip-nx-cache"
+      ],
+      "cwd": "${workspaceFolder}",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "smartStep": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "my-ux",
+      "program": "${workspaceFolder}/node_modules/nx/bin/nx.js",
+      "args": [
+        "test",
+        "my-ux",
+        "--testPathPattern=example.spec.ts",
+        "--testTimeout=9999999",
+        "--skip-nx-cache"
+      ],
+      "cwd": "${workspaceFolder}",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "smartStep": true
     }
   ],
   "compounds": [
