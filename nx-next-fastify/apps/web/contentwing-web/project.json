@@ -1,9 +1,0 @@
-{
-  "name": "contentwing-web",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/web/contentwing-web",
-  "projectType": "application",
-  "tags": ["web"],
-  "// targets": "to see all targets run: nx show project contentwing-web --web",
-  "targets": {}
-}
