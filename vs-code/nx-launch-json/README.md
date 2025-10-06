@@ -12,18 +12,38 @@ A TypeScript class that automatically generates VS Code launch configurations fo
 
 ## Usage
 
-### Command Line
-
-Run directly from your Nx workspace root:
+### Command Line Interface
 
 ```bash
-npx ts-node path/to/cli.ts
+# Show help
+npx ts-node cli.ts --help
+
+# Auto-detect workspace from current directory
+npx ts-node cli.ts
+
+# Specify workspace path explicitly
+npx ts-node cli.ts "/path/to/workspace"
+npx ts-node cli.ts "C:\path\to\workspace"
+```
+
+#### Examples
+
+```bash
+# From within an Nx workspace (auto-detection)
+cd /path/to/nx-workspace
+npx ts-node /path/to/vs-code/nx-launch-json/cli.ts
+
+# With explicit Windows path
+npx ts-node cli.ts "C:\data\seawingai\git\nx\21.6.3\nx-next-fastify\my-project"
+
+# With explicit Unix path
+npx ts-node cli.ts "/home/user/projects/my-nx-workspace"
 ```
 
 ### Programmatic Usage
 
 ```typescript
-import { NxLaunchConfigGenerator, generateNxLaunchJson } from './nx-launch-json';
+import { NxLaunchConfigGenerator, generateNxLaunchJson } from './cli';
 
 // Option 1: Using the class directly
 const generator = new NxLaunchConfigGenerator('/path/to/workspace');
@@ -82,7 +102,21 @@ Creates `.vscode/launch.json` with:
 
 ## Error Handling
 
-- Gracefully handles missing directories
-- Reports progress and errors to console
-- Creates `.vscode` directory if it doesn't exist
-- Validates workspace structure before generation
+- ✅ Validates workspace path exists
+- ✅ Validates nx.json presence
+- ✅ Reports progress and errors to console
+- ✅ Creates `.vscode` directory if it doesn't exist
+- ✅ Gracefully handles missing project directories
+- ✅ Provides helpful error messages with suggestions
+
+## CLI Arguments
+
+| Argument         | Description                                      | Required |
+| ---------------- | ------------------------------------------------ | -------- |
+| `workspace-path` | Path to Nx workspace root (must contain nx.json) | No       |
+| `--help`, `-h`   | Show help information                            | No       |
+
+## Exit Codes
+
+- `0` - Success
+- `1` - Error (invalid path, missing nx.json, etc.)

@@ -271,21 +271,84 @@ export async function generateNxLaunchJson(workspaceFolder?: string): Promise<vo
   await generator.generateLaunchJson();
 }
 
-// Usage examples:
-// 
-// 1. Run directly from command line:
-//    npx ts-node cli.ts
-//
-// 2. Use programmatically:
-//    import { NxLaunchConfigGenerator } from './nx-launch-json';
-//    const generator = new NxLaunchConfigGenerator('/path/to/workspace');
-//    await generator.generateLaunchJson();
-//
-// 3. Use the convenience function:
-//    import { generateNxLaunchJson } from './nx-launch-json';
-//    await generateNxLaunchJson('/path/to/workspace');
+function printUsage(): void {
+  console.log(`
+🚀 Nx Launch Config Generator CLI
+
+Usage:
+  npx ts-node cli.ts [workspace-path]
+
+Arguments:
+  workspace-path    Optional path to Nx workspace root (must contain nx.json)
+                   If not provided, will auto-detect from current directory
+
+Examples:
+  npx ts-node cli.ts
+  npx ts-node cli.ts /path/to/workspace
+  npx ts-node cli.ts "C:\\path\\to\\workspace"
+
+Programmatic Usage:
+  import { NxLaunchConfigGenerator, generateNxLaunchJson } from './cli';
+  
+  const generator = new NxLaunchConfigGenerator('/path/to/workspace');
+  await generator.generateLaunchJson();
+  
+  // Or use convenience function
+  await generateNxLaunchJson('/path/to/workspace');
+`);
+}
+
+function parseCliArgs(): { workspacePath?: string; showHelp: boolean } {
+  const args = process.argv.slice(2);
+  
+  if (args.includes('--help') || args.includes('-h')) {
+    return { showHelp: true };
+  }
+  
+  const workspacePath = args[0];
+  return { workspacePath, showHelp: false };
+}
+
+async function runCli(): Promise<void> {
+  try {
+    const { workspacePath, showHelp } = parseCliArgs();
+    
+    if (showHelp) {
+      printUsage();
+      return;
+    }
+    
+    console.log('🎯 Nx Launch Config Generator');
+    
+    if (workspacePath) {
+      console.log(`📂 Using workspace: ${workspacePath}`);
+      
+      // Validate workspace path
+      if (!existsSync(workspacePath)) {
+        console.error(`❌ Error: Workspace path does not exist: ${workspacePath}`);
+        process.exit(1);
+      }
+      
+      const nxJsonPath = join(workspacePath, 'nx.json');
+      if (!existsSync(nxJsonPath)) {
+        console.error(`❌ Error: Not a valid Nx workspace. Missing nx.json in: ${workspacePath}`);
+        console.log('💡 Make sure the path points to the root of an Nx workspace.');
+        process.exit(1);
+      }
+    } else {
+      console.log('🔍 Auto-detecting workspace from current directory...');
+    }
+    
+    await generateNxLaunchJson(workspacePath);
+    
+  } catch (error) {
+    console.error('❌ CLI Error:', error instanceof Error ? error.message : error);
+    console.log('\n💡 Use --help for usage information');
+    process.exit(1);
+  }
+}
 
 // Execute if this file is run directly
 if (require.main === module) {
-  generateNxLaunchJson().catch(console.error);
+  runCli().catch(console.error);
 }

@@ -7,8 +7,9 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/nx-launch-json.js",
-    "dev": "ts-node cli.ts",
-    "generate": "ts-node cli.ts"
+    "dev": "ts-node nx-launch-json/cli.ts",
+    "generate": "ts-node nx-launch-json/cli.ts",
+    "help": "ts-node nx-launch-json/cli.ts --help"
   },
   "keywords": [
     "nx",
